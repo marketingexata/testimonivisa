@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Form Testimoni & Klaim Voucher - VisaTG Japan</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(180deg, #dcebff 0%, #f2f7ff 45%, #ffffff 100%);
+      min-height: 100vh;
+    }
+    .font-handwriting {
+      font-family: 'Caveat', cursive;
+    }
+    /* Animasi Lingkaran Loading */
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.25s ease-out;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 9999px; }
+  </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- OVERLAY LOADING (LINGKARAN + PERSENTASE 0-100%) -->
+  <div id="loadingOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-900/80 backdrop-blur-md transition-opacity duration-300">
+    <div class="bg-white rounded-3xl p-7 shadow-2xl max-w-xs w-[88%] flex flex-col items-center text-center border border-blue-100">
+      <div class="relative w-28 h-28 flex items-center justify-center mb-4">
+        <svg class="w-28 h-28" viewBox="0 0 120 120">
+          <circle class="text-blue-100" stroke-width="10" stroke="currentColor" fill="transparent" r="50" cx="60" cy="60" />
+          <circle id="progressCircle" class="text-[#0066FF] progress-ring__circle" stroke-width="10" stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" stroke="currentColor" fill="transparent" r="50" cx="60" cy="60" />
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span id="progressPercent" class="text-2xl font-extrabold text-[#0066FF]">0%</span>
+        </div>
+      </div>
+      <h3 id="loadingTitle" class="text-base font-bold text-slate-800 mb-1">Memuat Formulir...</h3>
+      <p id="loadingSubtitle" class="text-xs text-slate-500 leading-relaxed">Mohon tunggu sebentar, sedang menyiapkan halaman VisaTG Japan.</p>
+    </div>
+  </div>
+
+  <!-- CONTAINER UTAMA (Tidak mepet di layar HP: px-4 sm:px-6, proporsional di Desktop: max-w-xl) -->
+  <main class="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    
+    <!-- KARTU UTAMA FORMULIR -->
+    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl shadow-blue-900/10 border border-blue-100 overflow-hidden relative">
+      
+      <!-- Dekorasi Sudut Biru ala Poster VisaTG Japan -->
+      <div class="absolute -top-12 -left-12 w-36 h-36 bg-[#0066FF] rounded-full opacity-15 pointer-events-none"></div>
+      <div class="absolute -top-6 -right-10 w-28 h-28 bg-blue-400 rounded-full opacity-10 pointer-events-none"></div>
+
+      <!-- HEADER BRANDING VISATG JAPAN -->
+      <div class="pt-7 pb-5 px-5 sm:px-8 text-center relative border-b border-slate-100 bg-gradient-to-b from-blue-50/70 to-white">
+        <p class="font-handwriting text-lg sm:text-xl text-slate-700 -rotate-2 mb-1">
+          - Wujudkan Perjalanan & Karir ke Jepang Bersama Kami -
+        </p>
+        
+        <div class="inline-block relative my-1">
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
+            Visa<span class="text-[#0066FF]">TG</span>
+          </h1>
+          <span class="font-handwriting text-3xl sm:text-4xl text-[#0066FF] block -mt-3 ml-16">
+            japan
+          </span>
+        </div>
+
+        <div class="mt-2">
+          <span class="inline-block bg-[#f3efe6] text-slate-800 text-[11px] sm:text-xs font-semibold tracking-[0.2em] px-4 py-1.5 rounded-full uppercase shadow-sm">
+            JAPAN VISA SPECIALIST
+          </span>
+        </div>
+
+        <p class="text-[11px] font-semibold tracking-[0.25em] text-slate-500 mt-2.5 uppercase">
+          MUDAH &bull; AMAN &bull; TERPERCAYA
+        </p>
+
+        <!-- BANNER REWARD JP SMART -->
+        <div class="mt-5 bg-gradient-to-r from-[#0066FF] to-blue-500 text-white p-3.5 rounded-2xl shadow-md shadow-blue-500/20 flex items-center gap-3 text-left">
+          <div class="bg-white/20 p-2.5 rounded-xl shrink-0">
+            <i data-lucide="gift" class="w-6 h-6 text-yellow-300"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-yellow-400 text-slate-900 px-2 py-0.5 rounded-md">Reward Spesial</span>
+            <p class="text-xs sm:text-sm font-bold mt-0.5 leading-snug">
+              Isi Kritik & Saran, Langsung Dapat Voucher Diskon Rp50.000 SIM Card Jepang JP Smart! 🇯🇵
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISI FORMULIR -->
+      <form id="feedbackForm" class="p-5 sm:p-8 space-y-6">
+        
+        <!-- BAGIAN 1: DATA DIRI & LAYANAN VISA -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-[#0066FF] text-xs font-bold flex items-center justify-center">1</span>
+            <h2 class="font-bold text-slate-800 text-sm sm:text-base">Data Diri & Layanan Visa</h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
+              <input type="text" id="nama" required placeholder="Contoh: Budi Santoso"
+                class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100 outline-none transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">No. WhatsApp Aktif <span class="text-red-500">*</span></label>
+              <input type="tel" id="whatsapp" required placeholder="Contoh: 081234567890"
+                class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100 outline-none transition" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Jenis Layanan Visa yang Diurus <span class="text-red-500">*</span></label>
+            <select id="jenisVisa" required onchange="toggleCustomInput('jenisVisa', 'customVisaBox', 'customVisaInput')"
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100 outline-none transition">
+              <option value="" disabled selected>-- Pilih Layanan Visa --</option>
+              <option value="Tokutei Ginou (Kerja di Jepang)">Tokutei Ginou — Kerja di Jepang lebih dekat</option>
+              <option value="Waiver (Liburan ke Jepang)">Waiver — Liburan ke Jepang lebih mudah</option>
+              <option value="Family Visit (Kumpul Keluarga)">Family Visit — Berkumpul dengan keluarga tercinta</option>
+              <option value="Engineering (Karir Profesional)">Engineering — Karir profesional di Jepang</option>
+              <option value="Intercompany (Penugasan Kerja)">Intercompany — Penugasan kerja ke Jepang</option>
+              <option value="LAINNYA">Lainnya (Isi Sendiri)...</option>
+            </select>
+            <div id="customVisaBox" class="hidden mt-2">
+              <input type="text" id="customVisaInput" placeholder="Tuliskan jenis pengurusan visa kamu..."
+                class="w-full px-3.5 py-2 text-sm rounded-xl border border-blue-300 bg-blue-50/40 focus:border-[#0066FF] outline-none" />
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 2: RATING & APRESIASI -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-[#0066FF] text-xs font-bold flex items-center justify-center">2</span>
+            <h2 class="font-bold text-slate-800 text-sm sm:text-base">Penilaian Layanan VisaTG Japan</h2>
+          </div>
+
+          <!-- Star Rating Interaktif -->
+          <div class="bg-slate-50 rounded-2xl p-4 text-center border border-slate-100">
+            <p class="text-xs font-semibold text-slate-600 mb-2">Seberapa puas kamu dengan pendampingan kami? <span class="text-red-500">*</span></p>
+            <div class="flex items-center justify-center gap-2 sm:gap-3 my-1" id="starContainer">
+              <button type="button" onclick="setRating(1)" class="star-btn p-1 transition transform hover:scale-110 focus:outline-none">
+                <i data-lucide="star" class="w-8 h-8 text-slate-300"></i>
+              </button>
+              <button type="button" onclick="setRating(2)" class="star-btn p-1 transition transform hover:scale-110 focus:outline-none">
+                <i data-lucide="star" class="w-8 h-8 text-slate-300"></i>
+              </button>
+              <button type="button" onclick="setRating(3)" class="star-btn p-1 transition transform hover:scale-110 focus:outline-none">
+                <i data-lucide="star" class="w-8 h-8 text-slate-300"></i>
+              </button>
+              <button type="button" onclick="setRating(4)" class="star-btn p-1 transition transform hover:scale-110 focus:outline-none">
+                <i data-lucide="star" class="w-8 h-8 text-slate-300"></i>
+              </button>
+              <button type="button" onclick="setRating(5)" class="star-btn p-1 transition transform hover:scale-110 focus:outline-none">
+                <i data-lucide="star" class="w-8 h-8 text-slate-300"></i>
+              </button>
+            </div>
+            <input type="hidden" id="ratingValue" required />
+            <p id="ratingLabel" class="text-xs font-bold text-[#0066FF] mt-1.5 min-h-[18px]">Ketuk bintang untuk memberi nilai</p>
+          </div>
+
+          <!-- Dropdown Hal yang Paling Disukai -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Hal yang Paling Kamu Sukai dari Layanan Kami <span class="text-red-500">*</span></label>
+            <select id="keunggulan" required onchange="toggleCustomInput('keunggulan', 'customKeunggulanBox', 'customKeunggulanInput')"
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100 outline-none transition">
+              <option value="" disabled selected>-- Pilih Hal yang Paling Berkesan --</option>
+              <option value="Konsultasi Gratis & Solutif">Konsultasi Gratis & Penjelasan Mudah Dipahami</option>
+              <option value="Pendampingan Profesional & Ramah">Pendampingan Profesional & Admin Sangat Ramah</option>
+              <option value="Proses Jelas dan Transparan">Proses Jelas, Cepat, dan Transparan</option>
+              <option value="Berpengalaman dan Terpercaya">Tim Berpengalaman & Terpercaya Sampai Visa Jadi</option>
+              <option value="LAINNYA">Lainnya (Isi Sendiri)...</option>
+            </select>
+            <div id="customKeunggulanBox" class="hidden mt-2">
+              <input type="text" id="customKeunggulanInput" placeholder="Ceritakan hal yang paling kamu sukai..."
+                class="w-full px-3.5 py-2 text-sm rounded-xl border border-blue-300 bg-blue-50/40 focus:border-[#0066FF] outline-none" />
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 3: KRITIK & SARAN MEMBANGUN -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-[#0066FF] text-xs font-bold flex items-center justify-center">3</span>
+            <h2 class="font-bold text-slate-800 text-sm sm:text-base">Kritik & Saran Membangun</h2>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Bagian Apa yang Perlu Kami Tingkatkan? <span class="text-red-500">*</span></label>
+            <select id="topikSaran" required onchange="toggleCustomInput('topikSaran', 'customSaranBox', 'customSaranInput')"
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100 outline-none transition">
+              <option value="" disabled selected>-- Pilih Topik Masukan / Saran --</option>
+              <option value="Sudah Sangat Puas (Pertahankan Layanan)">Sudah Sangat Puas — Pertahankan Kinerja Tim!</option>
+              <option value="Kecepatan Balas Chat / Respons Admin">Kecepatan Balas Chat / Respons Admin</option>
+              <option value="Kecepatan Proses & Update Status Dokumen">Kecepatan Proses & Update Status Dokumen</option>
+              <option value="Kejelasan Panduan & Checklist Dokumen">Kejelasan Panduan & Checklist Persyaratan</option>
+              <option value="Transparansi Informasi Biaya & Estimasi Waktu">Transparansi Informasi Biaya & Estimasi Waktu</option>
+              <option value="LAINNYA">Lainnya (Tulis Sendiri)...</option>
+            </select>
+            <div id="customSaranBox" class="hidden mt-2">
+              <input type="text" id="customSaranInput" placeholder="Tuliskan topik kritik/saranmu..."
+                class="w-full px-3.5 py-2 text-sm rounded-xl border border-blue-300 bg-blue-50/40 focus:border-[#0066FF] outline-none" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Detail Pesan, Kesan, atau Saran Tambahan <span class="text-red-500">*</span></label>
+            <!-- Tombol Ide Cepat (Quick Chips) -->
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <button type="button" onclick="addQuickText('Terima kasih VisaTG Japan, proses visa saya lancar dan aman! ')"
+                class="text-[11px] bg-blue-50 hover:bg-blue-100 text-[#0066FF] px-2.5 py-1 rounded-full font-medium transition">
+                + Proses lancar & aman
+              </button>
+              <button type="button" onclick="addQuickText('Admin sangat sabar membimbing dari awal sampai visa turun. ')"
+                class="text-[11px] bg-blue-50 hover:bg-blue-100 text-[#0066FF] px-2.5 py-1 rounded-full font-medium transition">
+                + Admin sabar & ramah
+              </button>
+              <button type="button" onclick="addQuickText('Semoga ke depannya update status dokumen makin cepat. ')"
+                class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 rounded-full font-medium transition">
+                + Semoga makin cepat
+              </button>
+            </div>
+            <textarea id="detailSaran" rows="3" required placeholder="Bagikan cerita singkat pengalamanmu atau saran agar VisaTG Japan makin baik..."
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100 outline-none transition"></textarea>
+          </div>
+        </div>
+
+        <!-- BAGIAN 4: UPLOAD VIDEO TESTIMONI (OPSIONAL) -->
+        <div class="space-y-3 bg-gradient-to-br from-blue-50/90 via-indigo-50/50 to-white p-4 sm:p-5 rounded-2xl border border-blue-200">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <div class="p-2 bg-[#0066FF] text-white rounded-xl">
+                <i data-lucide="video" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h2 class="font-bold text-slate-800 text-sm sm:text-base">Kirim Video Testimoni Singkat</h2>
+                <span class="text-[11px] font-semibold text-[#0066FF] bg-blue-100 px-2 py-0.5 rounded-md">Opsional / Jika Berkenan</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Punya waktu <strong>15–30 detik</strong>? Yuk bagikan kebahagiaanmu setelah visa berhasil diurus bersama <strong>VisaTG Japan</strong>! Video kamu sangat berarti untuk menginspirasi teman-teman lain yang ingin berangkat ke Jepang. ✨
+          </p>
+
+          <div class="bg-white/80 rounded-xl p-3 border border-blue-100 text-[11px] text-slate-600 space-y-1">
+            <p class="font-bold text-slate-700">💡 Ide Singkat Isi Video:</p>
+            <p>1. Sebutkan nama & jenis visa yang kamu urus (misal: <em>Tokutei Ginou / Waiver</em>).</p>
+            <p>2. Ceritakan kesanmu dibantu tim VisaTG Japan (mudah, aman, terpercaya).</p>
+          </div>
+
+          <!-- Area Pilih / Rekam Video -->
+          <div>
+            <label for="videoInput" id="dropzoneLabel"
+              class="flex flex-col items-center justify-center w-full py-5 px-4 border-2 border-dashed border-blue-300 rounded-2xl cursor-pointer bg-white hover:bg-blue-50/50 transition text-center">
+              <i data-lucide="upload-cloud" class="w-8 h-8 text-[#0066FF] mb-1.5"></i>
+              <span class="text-xs sm:text-sm font-bold text-slate-700">Ketuk untuk Pilih atau Rekam Video</span>
+              <span class="text-[11px] text-slate-400 mt-0.5">Format MP4/MOV (Maks. 35 MB)</span>
+              <input id="videoInput" type="file" accept="video/*" class="hidden" onchange="handleVideoSelect(event)" />
+            </label>
+
+            <!-- Preview Video Jika Dipilih -->
+            <div id="videoPreviewBox" class="hidden mt-3 bg-white p-3 rounded-xl border border-blue-200">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2 truncate">
+                  <i data-lucide="film" class="w-4 h-4 text-[#0066FF] shrink-0"></i>
+                  <span id="videoFileName" class="text-xs font-semibold text-slate-700 truncate">video.mp4</span>
+                  <span id="videoFileSize" class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md shrink-0">0 MB</span>
+                </div>
+                <button type="button" onclick="removeVideo()" class="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1 shrink-0">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
+                </button>
+              </div>
+              <video id="videoPlayer" controls class="w-full max-h-48 rounded-lg bg-slate-900"></video>
+            </div>
+          </div>
+
+          <label class="flex items-start gap-2.5 pt-1 cursor-pointer">
+            <input type="checkbox" id="izinSosmed" checked class="mt-0.5 w-4 h-4 text-[#0066FF] rounded border-slate-300 focus:ring-[#0066FF]" />
+            <span class="text-[11px] text-slate-600 leading-snug">
+              Saya mengizinkan ulasan/video testimoni saya ditampilkan di media sosial resmi <strong>VisaTG Japan</strong>.
+            </span>
+          </label>
+        </div>
+
+        <!-- TOMBOL SUBMIT -->
+        <button type="submit" id="submitBtn"
+          class="w-full py-3.5 px-6 rounded-2xl bg-[#0066FF] hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2">
+          <span>Kirim & Ambil Voucher Rp50.000</span>
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- FOOTER -->
+    <p class="text-center text-xs text-slate-400 mt-5">
+      &copy; 2026 <strong>VisaTG Japan</strong> &times; <strong>JP Smart Indonesia</strong>. All rights reserved.
+    </p>
+  </main>
+
+  <!-- MODAL SUKSES & KODE UNIK DISKON JP SMART -->
+  <div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/75 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border border-blue-100 relative animate-fade-in">
+      <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="check-circle-2" class="w-10 h-10"></i>
+      </div>
+      
+      <span class="font-handwriting text-2xl text-[#0066FF] block -mb-1">See You in Japan!</span>
+      <h3 class="text-xl font-extrabold text-slate-900">Terima Kasih Banyak! 🎉</h3>
+      <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+        Masukan kamu sudah kami terima. Sebagai apresiasi, ini kode voucher diskon <strong>Rp50.000</strong> pembelian SIM Card Jepang <strong>JP Smart</strong>:
+      </p>
+
+      <!-- Kotak Kode Unik -->
+      <div class="my-5 bg-blue-50 border-2 border-dashed border-[#0066FF] rounded-2xl p-4">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1">KODE VOUCHER UNIK KAMU</span>
+        <div class="flex items-center justify-center gap-2">
+          <span id="voucherCodeDisplay" class="text-2xl sm:text-3xl font-extrabold tracking-wider text-[#0066FF]">JPS50-XXXX</span>
+        </div>
+        <button type="button" onclick="copyVoucher()" id="copyBtn"
+          class="mt-3 inline-flex items-center gap-1.5 bg-[#0066FF] hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span id="copyBtnText">Salin Kode Unik</span>
+        </button>
+      </div>
+
+      <p class="text-[11px] text-slate-500 mb-5">
+        *Simpan atau <em>screenshot</em> kode ini dan tunjukkan ke Admin saat memesan SIM Card Jepang JP Smart.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-2.5">
+        <a id="waRedeemLink" href="#" target="_blank"
+          class="flex-1 py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>Redeem via WhatsApp</span>
+        </a>
+        <button type="button" onclick="location.reload()"
+          class="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition">
+          Selesai
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. KONFIGURASI URL GOOGLE APPS SCRIPT & NOMOR ADMIN REDEEM
+    // =========================================================================
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySbTna-wrcELYBoAc4A3VTsRPxEkPv1kNIbOCcuSO-sUp8brvhKPw75yH5AmX2W2lV/exec"; 
+    const ADMIN_WA_NUMBER = "6281188899744"; // Ganti dengan No WA Admin JP Smart (format 628...)
+
+    let selectedRating = 0;
+    let selectedVideoFile = null;
+    const circle = document.getElementById('progressCircle');
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+
+    // Fungsi Update Lingkaran Loading & Persentase (0 - 100%)
+    function setProgress(percent, title = null, subtitle = null) {
+      const clamped = Math.min(100, Math.max(0, Math.round(percent)));
+      const offset = circumference - (clamped / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+      document.getElementById('progressPercent').innerText = `${clamped}%`;
+      if (title) document.getElementById('loadingTitle').innerText = title;
+      if (subtitle) document.getElementById('loadingSubtitle').innerText = subtitle;
+    }
+
+    // Animasi Loading Saat Halaman Pertama Kali Dibuka
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      let loadVal = 0;
+      const initInterval = setInterval(() => {
+        loadVal += Math.floor(Math.random() * 25) + 15;
+        if (loadVal >= 100) {
+          loadVal = 100;
+          setProgress(100, "Siap Digunakan!", "Halaman berhasil dimuat.");
+          clearInterval(initInterval);
+          setTimeout(() => {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+          }, 300);
+        } else {
+          setProgress(loadVal);
+        }
+      }, 120);
+    });
+
+    // Fungsi Pilih Bintang Rating
+    const ratingDescriptions = {
+      1: "1/5 — Kurang Puas, Perlu Banyak Perbaikan 😔",
+      2: "2/5 — Cukup, Masih Ada Beberapa Kendala 😐",
+      3: "3/5 — Baik, Layanan Sesuai Standar 🙂",
+      4: "4/5 — Puas! Proses Mudah & Terbantu 😊",
+      5: "5/5 — Sangat Puas! Mudah, Aman & Terpercaya 🌟"
+    };
+
+    function setRating(val) {
+      selectedRating = val;
+      document.getElementById('ratingValue').value = val;
+      document.getElementById('ratingLabel').innerText = ratingDescriptions[val];
+      const buttons = document.querySelectorAll('#starContainer .star-btn');
+      buttons.forEach((btn, idx) => {
+        const icon = btn.querySelector('svg');
+        if (idx < val) {
+          icon.classList.remove('text-slate-300');
+          icon.classList.add('text-yellow-400', 'fill-yellow-400');
+        } else {
+          icon.classList.remove('text-yellow-400', 'fill-yellow-400');
+          icon.classList.add('text-slate-300');
+        }
+      });
+    }
+
+    // Fungsi Tampilkan Input Manual Jika Pilih "Lainnya (Isi Sendiri)"
+    function toggleCustomInput(selectId, boxId, inputId) {
+      const selectEl = document.getElementById(selectId);
+      const boxEl = document.getElementById(boxId);
+      const inputEl = document.getElementById(inputId);
+      if (selectEl.value === 'LAINNYA') {
+        boxEl.classList.remove('hidden');
+        inputEl.required = true;
+        inputEl.focus();
+      } else {
+        boxEl.classList.add('hidden');
+        inputEl.required = false;
+        inputEl.value = '';
+      }
+    }
+
+    // Fungsi Tambah Teks Cepat di Textarea
+    function addQuickText(text) {
+      const area = document.getElementById('detailSaran');
+      area.value = (area.value ? area.value.trim() + ' ' : '') + text;
+      area.focus();
+    }
+
+    // Fungsi Pilih & Validasi Video Testimoni
+    function handleVideoSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const maxSizeMB = 35;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        alert(`Ukuran video (${fileSizeMB} MB) melebihi batas maksimal ${maxSizeMB} MB. Silakan pilih video yang lebih pendek/kecil ya.`);
+        event.target.value = "";
+        return;
+      }
+
+      selectedVideoFile = file;
+      document.getElementById('videoFileName').innerText = file.name;
+      document.getElementById('videoFileSize').innerText = `${fileSizeMB} MB`;
+      
+      const videoURL = URL.createObjectURL(file);
+      const player = document.getElementById('videoPlayer');
+      player.src = videoURL;
+
+      document.getElementById('dropzoneLabel').classList.add('hidden');
+      document.getElementById('videoPreviewBox').classList.remove('hidden');
+    }
+
+    function removeVideo() {
+      selectedVideoFile = null;
+      document.getElementById('videoInput').value = "";
+      document.getElementById('videoPlayer').src = "";
+      document.getElementById('videoPreviewBox').classList.add('hidden');
+      document.getElementById('dropzoneLabel').classList.remove('hidden');
+    }
+
+    // Konversi File Video ke Base64 dengan Progress Real-Time (0 - 40%)
+    function fileToBase64WithProgress(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percentLoaded = Math.round((e.loaded / e.total) * 40);
+            setProgress(percentLoaded, "Memproses Video Testimoni...", `Membaca file video (${percentLoaded}%)`);
+          }
+        };
+        reader.onload = () => {
+          const base64String = reader.result.split(',')[1];
+          resolve(base64String);
+        };
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Generate Kode Unik Voucher (Format: JPS50-XXXX)
+    function generateVoucherCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let randomPart = '';
+      for (let i = 0; i < 5; i++) {
+        randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return `JPS50-${randomPart}`;
+    }
+
+    // Submit Formulir
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!selectedRating) {
+        alert("Mohon berikan penilaian bintang (1-5) terlebih dahulu ya!");
+        return;
+      }
+
+      const overlay = document.getElementById('loadingOverlay');
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      setProgress(5, "Menyiapkan Data...", "Sedang merangkum kritik & saran kamu.");
+
+      try {
+        const jenisVisaSelect = document.getElementById('jenisVisa').value;
+        const jenisVisaFinal = jenisVisaSelect === 'LAINNYA' ? document.getElementById('customVisaInput').value : jenisVisaSelect;
+
+        const keunggulanSelect = document.getElementById('keunggulan').value;
+        const keunggulanFinal = keunggulanSelect === 'LAINNYA' ? document.getElementById('customKeunggulanInput').value : keunggulanSelect;
+
+        const topikSaranSelect = document.getElementById('topikSaran').value;
+        const topikSaranFinal = topikSaranSelect === 'LAINNYA' ? document.getElementById('customSaranInput').value : topikSaranSelect;
+
+        const voucherCode = generateVoucherCode();
+
+        let videoData = null;
+        if (selectedVideoFile) {
+          const base64Video = await fileToBase64WithProgress(selectedVideoFile);
+          videoData = {
+            fileName: `${ document.getElementById('nama').value.replace(/\s+/g, '_') }_${voucherCode}_${selectedVideoFile.name}`,
+            mimeType: selectedVideoFile.type,
+            base64: base64Video
+          };
+        } else {
+          setProgress(35, "Memproses Data...", "Menyiapkan pengiriman ke server.");
+        }
+
+        const payload = {
+          voucherCode: voucherCode,
+          nama: document.getElementById('nama').value.trim(),
+          whatsapp: document.getElementById('whatsapp').value.trim(),
+          jenisVisa: jenisVisaFinal,
+          rating: selectedRating,
+          keunggulan: keunggulanFinal,
+          topikSaran: topikSaranFinal,
+          detailSaran: document.getElementById('detailSaran').value.trim(),
+          izinSosmed: document.getElementById('izinSosmed').checked ? "Ya, Diizinkan" : "Tidak",
+          video: videoData
+        };
+
+        // Animasi Progress Unggah ke Google Drive & Google Sheets (40% -> 92%)
+        let currentProg = 40;
+        const uploadMessage = selectedVideoFile 
+          ? "Mengunggah video..." 
+          : "Mengunggah kritik & saran...";
+        
+        const uploadTimer = setInterval(() => {
+          if (currentProg < 92) {
+            currentProg += selectedVideoFile ? 2 : 6;
+            setProgress(currentProg, "Mengirim Data...", uploadMessage);
+          }
+        }, 250);
+
+        // Kirim ke Google Apps Script jika URL sudah diisi
+        if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("MASUKKAN_URL")) {
+          await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          // Simulasi jeda jika masih mode preview lokal
+          await new Promise(r => setTimeout(r, 1500));
+        }
+
+        clearInterval(uploadTimer);
+        setProgress(100, "Berhasil Terkirim!", "Kode voucher diskon Rp50.000 siap diklaim.");
+
+        setTimeout(() => {
+          overlay.classList.add('opacity-0', 'pointer-events-none');
+          showSuccessModal(voucherCode, payload.nama);
+        }, 500);
+
+      } catch (err) {
+        alert("Terjadi kendala saat mengirim data: " + err.message);
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    });
+
+    function showSuccessModal(code, nama) {
+      document.getElementById('voucherCodeDisplay').innerText = code;
+      const waText = encodeURIComponent(`Halo Admin JP Smart! Saya ${nama}, sudah mengisi form testimoni VisaTG Japan dan ingin klaim Voucher Diskon Rp50.000 SIM Card Jepang dengan Kode Unik: *${code}*`);
+      document.getElementById('waRedeemLink').href = `https://wa.me/${ADMIN_WA_NUMBER}?text=${waText}`;
+      
+      const modal = document.getElementById('successModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function copyVoucher() {
+      const code = document.getElementById('voucherCodeDisplay').innerText;
+      navigator.clipboard.writeText(code);
+      const btnText = document.getElementById('copyBtnText');
+      btnText.innerText = "Kode Berhasil Disalin!";
+      setTimeout(() => { btnText.innerText = "Salin Kode Unik"; }, 2500);
+    }
+  </script>
+</body>
+</html>
