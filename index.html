@@ -94,7 +94,7 @@
           <div>
             <span class="text-[10px] font-bold uppercase tracking-wider bg-yellow-400 text-slate-900 px-2 py-0.5 rounded-md">Reward Spesial</span>
             <p class="text-xs sm:text-sm font-bold mt-0.5 leading-snug">
-              Isi Kritik & Saran, Langsung Dapat Voucher Diskon Rp50.000 SIM Card Jepang JP Smart! 🇯🇵
+              Isi Kritik & Saran + Kirim Video Testimoni, Dapatkan Voucher Diskon Rp50.000 SIM Card Jepang JP Smart! 🇯🇵
             </p>
           </div>
         </div>
@@ -239,7 +239,7 @@
           </div>
         </div>
 
-        <!-- BAGIAN 4: UPLOAD VIDEO TESTIMONI (OPSIONAL) -->
+        <!-- BAGIAN 4: UPLOAD VIDEO TESTIMONI (SYARAT VOUCHER) -->
         <div class="space-y-3 bg-gradient-to-br from-blue-50/90 via-indigo-50/50 to-white p-4 sm:p-5 rounded-2xl border border-blue-200">
           <div class="flex items-start justify-between gap-2">
             <div class="flex items-center gap-2">
@@ -248,13 +248,13 @@
               </div>
               <div>
                 <h2 class="font-bold text-slate-800 text-sm sm:text-base">Kirim Video Testimoni Singkat</h2>
-                <span class="text-[11px] font-semibold text-[#0066FF] bg-blue-100 px-2 py-0.5 rounded-md">Opsional / Jika Berkenan</span>
+                <span class="text-[11px] font-semibold text-[#0066FF] bg-blue-100 px-2 py-0.5 rounded-md">Wajib untuk Klaim Voucher Rp50.000</span>
               </div>
             </div>
           </div>
 
           <p class="text-xs text-slate-600 leading-relaxed">
-            Punya waktu <strong>15–30 detik</strong>? Yuk bagikan kebahagiaanmu setelah visa berhasil diurus bersama <strong>VisaTG Japan</strong>! Video kamu sangat berarti untuk menginspirasi teman-teman lain yang ingin berangkat ke Jepang. ✨
+            Punya waktu <strong>15–30 detik</strong>? Yuk bagikan kebahagiaanmu setelah visa berhasil diurus bersama <strong>VisaTG Japan</strong>! Video kamu sangat berarti untuk menginspirasi teman-teman lain yang ingin berangkat ke Jepang. Setelah video diverifikasi tim kami, <strong>kode voucher dikirim via WhatsApp</strong>. ✨
           </p>
 
           <div class="bg-white/80 rounded-xl p-3 border border-blue-100 text-[11px] text-slate-600 space-y-1">
@@ -290,7 +290,7 @@
           </div>
 
           <label class="flex items-start gap-2.5 pt-1 cursor-pointer">
-            <input type="checkbox" id="izinSosmed" checked class="mt-0.5 w-4 h-4 text-[#0066FF] rounded border-slate-300 focus:ring-[#0066FF]" />
+            <input type="checkbox" id="izinSosmed" class="mt-0.5 w-4 h-4 text-[#0066FF] rounded border-slate-300 focus:ring-[#0066FF]" />
             <span class="text-[11px] text-slate-600 leading-snug">
               Saya mengizinkan ulasan/video testimoni saya ditampilkan di media sosial resmi <strong>VisaTG Japan</strong>.
             </span>
@@ -313,47 +313,60 @@
     </p>
   </main>
 
-  <!-- MODAL SUKSES & KODE UNIK DISKON JP SMART -->
+  <!-- INPUT KAMERA (membuka kamera depan ponsel untuk rekam video langsung) -->
+  <input id="cameraInput" type="file" accept="video/*" capture="user" class="hidden" onchange="handleCameraCapture(event)" />
+
+  <!-- POPUP KONFIRMASI: TANPA VIDEO -->
+  <div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/75 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border border-blue-100">
+      <div class="w-16 h-16 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="gift" class="w-9 h-9"></i>
+      </div>
+      <h3 class="text-xl font-extrabold text-slate-900">Yakin mau melewatkan voucher Rp50.000?</h3>
+      <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+        Cukup luangkan <strong>beberapa detik</strong> untuk merekam video testimoni singkat, dan kamu berhak mendapat
+        <strong>voucher diskon Rp50.000</strong> SIM Card Jepang JP Smart. 🇯🇵
+      </p>
+      <div class="flex flex-col gap-2.5 mt-6">
+        <button type="button" onclick="openCamera()"
+          class="w-full py-3.5 px-4 rounded-2xl bg-[#0066FF] hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition">
+          <i data-lucide="video" class="w-5 h-5"></i>
+          <span>Rekam Sekarang</span>
+        </button>
+        <button type="button" onclick="submitWithoutVoucher()"
+          class="w-full py-3 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition">
+          Kirim Kritik &amp; Saran Tanpa Klaim Voucher
+        </button>
+        <button type="button" onclick="closeConfirmModal()" class="text-[11px] text-slate-400 hover:text-slate-600 underline pt-1">
+          Kembali ke form (pilih video dari galeri)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SUKSES (2 kondisi: dengan video / tanpa video) -->
   <div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/75 backdrop-blur-sm p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border border-blue-100 relative animate-fade-in">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border border-blue-100">
       <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-4">
         <i data-lucide="check-circle-2" class="w-10 h-10"></i>
       </div>
-      
       <span class="font-handwriting text-2xl text-[#0066FF] block -mb-1">See You in Japan!</span>
-      <h3 class="text-xl font-extrabold text-slate-900">Terima Kasih Banyak! 🎉</h3>
-      <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-        Masukan kamu sudah kami terima. Sebagai apresiasi, ini kode voucher diskon <strong>Rp50.000</strong> pembelian SIM Card Jepang <strong>JP Smart</strong>:
-      </p>
+      <h3 id="successTitle" class="text-xl font-extrabold text-slate-900">Terima Kasih Banyak! 🎉</h3>
+      <p id="successText" class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed"></p>
 
-      <!-- Kotak Kode Unik -->
-      <div class="my-5 bg-blue-50 border-2 border-dashed border-[#0066FF] rounded-2xl p-4">
-        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1">KODE VOUCHER UNIK KAMU</span>
-        <div class="flex items-center justify-center gap-2">
-          <span id="voucherCodeDisplay" class="text-2xl sm:text-3xl font-extrabold tracking-wider text-[#0066FF]">JPS50-XXXX</span>
-        </div>
-        <button type="button" onclick="copyVoucher()" id="copyBtn"
-          class="mt-3 inline-flex items-center gap-1.5 bg-[#0066FF] hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
-          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-          <span id="copyBtnText">Salin Kode Unik</span>
-        </button>
+      <div id="successVoucherBox" class="hidden my-5 bg-blue-50 border-2 border-dashed border-[#0066FF] rounded-2xl p-4 text-left">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">LANGKAH SELANJUTNYA</span>
+        <p class="text-xs text-slate-700 leading-relaxed">
+          1. Tim kami memverifikasi video kamu.<br>
+          2. Kode voucher Rp50.000 dikirim ke WhatsApp <strong id="successWa"></strong>.<br>
+          3. Tunjukkan kode ke Admin saat memesan SIM Card JP Smart.
+        </p>
       </div>
 
-      <p class="text-[11px] text-slate-500 mb-5">
-        *Simpan atau <em>screenshot</em> kode ini dan tunjukkan ke Admin saat memesan SIM Card Jepang JP Smart.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-2.5">
-        <a id="waRedeemLink" href="#" target="_blank"
-          class="flex-1 py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition">
-          <i data-lucide="message-circle" class="w-4 h-4"></i>
-          <span>Redeem via WhatsApp</span>
-        </a>
-        <button type="button" onclick="location.reload()"
-          class="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition">
-          Selesai
-        </button>
-      </div>
+      <button type="button" onclick="location.reload()"
+        class="mt-5 w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition">
+        Selesai
+      </button>
     </div>
   </div>
 
@@ -362,7 +375,7 @@
     // 1. KONFIGURASI URL GOOGLE APPS SCRIPT & NOMOR ADMIN REDEEM
     // =========================================================================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySbTna-wrcELYBoAc4A3VTsRPxEkPv1kNIbOCcuSO-sUp8brvhKPw75yH5AmX2W2lV/exec"; 
-    const ADMIN_WA_NUMBER = "6281188899744"; // Ganti dengan No WA Admin JP Smart (format 628...)
+    const ADMIN_WA_NUMBER = "6281188899744"; // (Tidak dipakai lagi: kode kini dikirim admin via WhatsApp setelah verifikasi video)
 
     let selectedRating = 0;
     let selectedVideoFile = null;
@@ -450,39 +463,70 @@
       area.focus();
     }
 
-    // Fungsi Pilih & Validasi Video Testimoni
-    function handleVideoSelect(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
+    // Terapkan file video (dari galeri atau kamera) + validasi ukuran
+    function applyVideoFile(file, inputEl) {
       const maxSizeMB = 35;
       const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
 
       if (file.size > maxSizeMB * 1024 * 1024) {
-        alert(`Ukuran video (${fileSizeMB} MB) melebihi batas maksimal ${maxSizeMB} MB. Silakan pilih video yang lebih pendek/kecil ya.`);
-        event.target.value = "";
-        return;
+        alert(`Ukuran video (${fileSizeMB} MB) melebihi batas maksimal ${maxSizeMB} MB. Silakan rekam video yang lebih pendek atau turunkan kualitas video ya.`);
+        inputEl.value = "";
+        return false;
       }
 
       selectedVideoFile = file;
       document.getElementById('videoFileName').innerText = file.name;
       document.getElementById('videoFileSize').innerText = `${fileSizeMB} MB`;
-      
-      const videoURL = URL.createObjectURL(file);
+
       const player = document.getElementById('videoPlayer');
-      player.src = videoURL;
+      if (player.src) URL.revokeObjectURL(player.src);
+      player.src = URL.createObjectURL(file);
 
       document.getElementById('dropzoneLabel').classList.add('hidden');
       document.getElementById('videoPreviewBox').classList.remove('hidden');
+      return true;
+    }
+
+    // Pilih video dari galeri / dropzone
+    function handleVideoSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      applyVideoFile(file, event.target);
+    }
+
+    // Video hasil rekam dari popup: simpan, tutup popup, lanjut kirim otomatis
+    function handleCameraCapture(event) {
+      const file = event.target.files[0];
+      if (!file) return; // user batal merekam -> popup tetap terbuka
+      if (applyVideoFile(file, event.target)) {
+        closeConfirmModal();
+        startSubmit();
+      }
     }
 
     function removeVideo() {
       selectedVideoFile = null;
       document.getElementById('videoInput').value = "";
-      document.getElementById('videoPlayer').src = "";
+      document.getElementById('cameraInput').value = "";
+      const player = document.getElementById('videoPlayer');
+      if (player.src) URL.revokeObjectURL(player.src);
+      player.removeAttribute('src');
+      player.load();
       document.getElementById('videoPreviewBox').classList.add('hidden');
       document.getElementById('dropzoneLabel').classList.remove('hidden');
     }
+
+    // Popup konfirmasi
+    function openConfirmModal() {
+      const m = document.getElementById('confirmModal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeConfirmModal() {
+      const m = document.getElementById('confirmModal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+    function openCamera() { document.getElementById('cameraInput').click(); }
+    function submitWithoutVoucher() { closeConfirmModal(); startSubmit(); }
 
     // Konversi File Video ke Base64 dengan Progress Real-Time (0 - 40%)
     function fileToBase64WithProgress(file) {
@@ -494,16 +538,13 @@
             setProgress(percentLoaded, "Memproses Video Testimoni...", `Membaca file video (${percentLoaded}%)`);
           }
         };
-        reader.onload = () => {
-          const base64String = reader.result.split(',')[1];
-          resolve(base64String);
-        };
+        reader.onload = () => resolve(reader.result.split(',')[1]);
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(file);
       });
     }
 
-    // Generate Kode Unik Voucher (Format: JPS50-XXXX)
+    // Kode referensi (hanya dibuat jika ada video; voucher resmi dikirim admin setelah verifikasi)
     function generateVoucherCode() {
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
       let randomPart = '';
@@ -513,36 +554,44 @@
       return `JPS50-${randomPart}`;
     }
 
-    // Submit Formulir
-    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+    // Submit Formulir: validasi bawaan browser sudah jalan sebelum event ini
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
       if (!selectedRating) {
         alert("Mohon berikan penilaian bintang (1-5) terlebih dahulu ya!");
         return;
       }
+      if (!selectedVideoFile) {
+        openConfirmModal(); // tanpa video -> bujuk dulu
+        return;
+      }
+      startSubmit();
+    });
+
+    let isSubmitting = false;
+
+    async function startSubmit() {
+      if (isSubmitting) return;
+      isSubmitting = true;
 
       const overlay = document.getElementById('loadingOverlay');
       overlay.classList.remove('opacity-0', 'pointer-events-none');
       setProgress(5, "Menyiapkan Data...", "Sedang merangkum kritik & saran kamu.");
 
       try {
-        const jenisVisaSelect = document.getElementById('jenisVisa').value;
-        const jenisVisaFinal = jenisVisaSelect === 'LAINNYA' ? document.getElementById('customVisaInput').value : jenisVisaSelect;
+        const val = (id) => document.getElementById(id).value;
+        const pick = (selId, customId) => val(selId) === 'LAINNYA' ? val(customId).trim() : val(selId);
 
-        const keunggulanSelect = document.getElementById('keunggulan').value;
-        const keunggulanFinal = keunggulanSelect === 'LAINNYA' ? document.getElementById('customKeunggulanInput').value : keunggulanSelect;
-
-        const topikSaranSelect = document.getElementById('topikSaran').value;
-        const topikSaranFinal = topikSaranSelect === 'LAINNYA' ? document.getElementById('customSaranInput').value : topikSaranSelect;
-
-        const voucherCode = generateVoucherCode();
+        const hasVideo = !!selectedVideoFile;
+        const refCode = hasVideo ? generateVoucherCode() : "";
+        const nama = val('nama').trim();
 
         let videoData = null;
-        if (selectedVideoFile) {
+        if (hasVideo) {
           const base64Video = await fileToBase64WithProgress(selectedVideoFile);
           videoData = {
-            fileName: `${ document.getElementById('nama').value.replace(/\s+/g, '_') }_${voucherCode}_${selectedVideoFile.name}`,
+            fileName: `${nama.replace(/\s+/g, '_')}_${refCode}_${selectedVideoFile.name}`,
             mimeType: selectedVideoFile.type,
             base64: base64Video
           };
@@ -551,74 +600,78 @@
         }
 
         const payload = {
-          voucherCode: voucherCode,
-          nama: document.getElementById('nama').value.trim(),
-          whatsapp: document.getElementById('whatsapp').value.trim(),
-          jenisVisa: jenisVisaFinal,
+          voucherCode: refCode,
+          klaimVoucher: hasVideo ? "Ya" : "Tidak",
+          statusVoucher: hasVideo ? "Menunggu verifikasi video" : "Tidak klaim",
+          nama: nama,
+          whatsapp: val('whatsapp').trim(),
+          jenisVisa: pick('jenisVisa', 'customVisaInput'),
           rating: selectedRating,
-          keunggulan: keunggulanFinal,
-          topikSaran: topikSaranFinal,
-          detailSaran: document.getElementById('detailSaran').value.trim(),
+          keunggulan: pick('keunggulan', 'customKeunggulanInput'),
+          topikSaran: pick('topikSaran', 'customSaranInput'),
+          detailSaran: val('detailSaran').trim(),
           izinSosmed: document.getElementById('izinSosmed').checked ? "Ya, Diizinkan" : "Tidak",
           video: videoData
         };
 
-        // Animasi Progress Unggah ke Google Drive & Google Sheets (40% -> 92%)
         let currentProg = 40;
-        const uploadMessage = selectedVideoFile 
-          ? "Mengunggah video..." 
-          : "Mengunggah kritik & saran...";
-        
+        const uploadMessage = hasVideo ? "Mengunggah video..." : "Mengunggah kritik & saran...";
         const uploadTimer = setInterval(() => {
           if (currentProg < 92) {
-            currentProg += selectedVideoFile ? 2 : 6;
+            currentProg += hasVideo ? 2 : 6;
             setProgress(currentProg, "Mengirim Data...", uploadMessage);
           }
         }, 250);
 
-        // Kirim ke Google Apps Script jika URL sudah diisi
-        if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("MASUKKAN_URL")) {
-          await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-          });
-        } else {
-          // Simulasi jeda jika masih mode preview lokal
-          await new Promise(r => setTimeout(r, 1500));
+        try {
+          if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("MASUKKAN_URL")) {
+            await fetch(APPS_SCRIPT_URL, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(payload)
+            });
+          } else {
+            await new Promise(r => setTimeout(r, 1500)); // simulasi mode preview lokal
+          }
+        } finally {
+          clearInterval(uploadTimer);
         }
 
-        clearInterval(uploadTimer);
-        setProgress(100, "Berhasil Terkirim!", "Kode voucher diskon Rp50.000 siap diklaim.");
+        setProgress(100, "Berhasil Terkirim!", hasVideo ? "Video kamu sedang menunggu verifikasi." : "Terima kasih atas masukanmu.");
 
         setTimeout(() => {
           overlay.classList.add('opacity-0', 'pointer-events-none');
-          showSuccessModal(voucherCode, payload.nama);
+          showSuccessModal(hasVideo, payload.whatsapp);
         }, 500);
 
       } catch (err) {
         alert("Terjadi kendala saat mengirim data: " + err.message);
         overlay.classList.add('opacity-0', 'pointer-events-none');
+        isSubmitting = false;
       }
-    });
+    }
 
-    function showSuccessModal(code, nama) {
-      document.getElementById('voucherCodeDisplay').innerText = code;
-      const waText = encodeURIComponent(`Halo Admin JP Smart! Saya ${nama}, sudah mengisi form testimoni VisaTG Japan dan ingin klaim Voucher Diskon Rp50.000 SIM Card Jepang dengan Kode Unik: *${code}*`);
-      document.getElementById('waRedeemLink').href = `https://wa.me/${ADMIN_WA_NUMBER}?text=${waText}`;
-      
+    function showSuccessModal(hasVideo, whatsapp) {
+      const title = document.getElementById('successTitle');
+      const text = document.getElementById('successText');
+      const box = document.getElementById('successVoucherBox');
+
+      if (hasVideo) {
+        title.textContent = "Terima Kasih Banyak! 🎉";
+        text.textContent = "Kritik, saran, dan video testimoni kamu sudah kami terima. Kamu berhak atas voucher diskon Rp50.000 SIM Card Jepang JP Smart setelah video terverifikasi.";
+        document.getElementById('successWa').textContent = whatsapp;
+        box.classList.remove('hidden');
+      } else {
+        title.textContent = "Terima Kasih atas Masukanmu! 🙏";
+        text.textContent = "Kritik & saran kamu sudah kami terima dan sangat membantu kami berkembang. Kali ini kamu tidak mengklaim voucher.";
+        box.classList.add('hidden');
+      }
+
       const modal = document.getElementById('successModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
-    }
-
-    function copyVoucher() {
-      const code = document.getElementById('voucherCodeDisplay').innerText;
-      navigator.clipboard.writeText(code);
-      const btnText = document.getElementById('copyBtnText');
-      btnText.innerText = "Kode Berhasil Disalin!";
-      setTimeout(() => { btnText.innerText = "Salin Kode Unik"; }, 2500);
+      lucide.createIcons();
     }
   </script>
 </body>
