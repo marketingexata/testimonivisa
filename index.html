@@ -453,6 +453,7 @@
       const buttons = document.querySelectorAll('#starContainer .star-btn');
       buttons.forEach((btn, idx) => {
         const icon = btn.querySelector('svg');
+        if (!icon) return; // ikon belum dimuat
         if (idx < val) {
           icon.classList.remove('text-slate-300');
           icon.classList.add('text-yellow-400', 'fill-yellow-400');
@@ -640,12 +641,25 @@
 
         let currentProg = 40;
         const uploadMessage = hasVideo ? "Mengunggah video..." : "Mengunggah kritik & saran...";
+        let waitedMs = 0;
         const uploadTimer = setInterval(() => {
+          waitedMs += 250;
+          const slowMsg = "Server sedang memproses, mohon tunggu sebentar...";
           if (currentProg < 92) {
             currentProg += hasVideo ? 2 : 6;
             setProgress(currentProg, "Mengirim Data...", uploadMessage);
+          } else if (currentProg < 99) {
+            currentProg += 0.2; // merayap pelan agar tidak terlihat macet
+            setProgress(currentProg, "Mengirim Data...", waitedMs > 8000 ? slowMsg : uploadMessage);
+          } else if (waitedMs > 8000) {
+            setProgress(currentProg, "Mengirim Data...", slowMsg);
           }
         }, 250);
+
+        // Batas waktu: jangan menunggu server selamanya
+        const ctrl = new AbortController();
+        const timeoutMs = hasVideo ? 180000 : 45000;
+        const timeoutId = setTimeout(() => ctrl.abort(), timeoutMs);
 
         try {
           if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("MASUKKAN_URL")) {
@@ -653,12 +667,14 @@
               method: 'POST',
               mode: 'no-cors',
               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify(payload)
+              body: JSON.stringify(payload),
+              signal: ctrl.signal
             });
           } else {
             await new Promise(r => setTimeout(r, 1500)); // simulasi mode preview lokal
           }
         } finally {
+          clearTimeout(timeoutId);
           clearInterval(uploadTimer);
         }
 
@@ -670,7 +686,11 @@
         }, 500);
 
       } catch (err) {
-        alert("Terjadi kendala saat mengirim data: " + err.message);
+        if (err && err.name === 'AbortError') {
+          alert("Koneksi ke server terlalu lama. Periksa sinyal internet kamu, lalu coba kirim ulang ya.");
+        } else {
+          alert("Terjadi kendala saat mengirim data: " + (err && err.message ? err.message : err));
+        }
         overlay.classList.add('opacity-0', 'pointer-events-none');
         isSubmitting = false;
       }
