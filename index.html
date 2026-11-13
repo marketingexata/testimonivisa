@@ -7,7 +7,8 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"
+    onerror="var s=document.createElement('script');s.src='https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js';document.head.appendChild(s);"></script>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
@@ -400,9 +401,28 @@
       if (subtitle) document.getElementById('loadingSubtitle').innerText = subtitle;
     }
 
+    // Render ikon dengan aman: jika library ikon gagal dimuat, form tetap jalan
+    function safeCreateIcons() {
+      try { if (window.lucide) lucide.createIcons(); } catch (e) { console.warn('Ikon tidak dapat dimuat:', e); }
+    }
+
+    // Sembunyikan overlay loading (tidak bergantung pada Tailwind)
+    function hideInitialOverlay() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (!overlay) return;
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => { overlay.style.display = 'none'; }, 350);
+    }
+
     // Animasi Loading Saat Halaman Pertama Kali Dibuka
     window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
+      safeCreateIcons();
+      // Jika library ikon datang terlambat, coba lagi
+      setTimeout(safeCreateIcons, 1500);
+
+      // Pengaman: apa pun yang terjadi, overlay hilang maksimal 4 detik
+      setTimeout(hideInitialOverlay, 4000);
+
       let loadVal = 0;
       const initInterval = setInterval(() => {
         loadVal += Math.floor(Math.random() * 25) + 15;
@@ -410,10 +430,7 @@
           loadVal = 100;
           setProgress(100, "Siap Digunakan!", "Halaman berhasil dimuat.");
           clearInterval(initInterval);
-          setTimeout(() => {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.add('opacity-0', 'pointer-events-none');
-          }, 300);
+          setTimeout(hideInitialOverlay, 300);
         } else {
           setProgress(loadVal);
         }
@@ -582,6 +599,7 @@
       isSubmitting = true;
 
       const overlay = document.getElementById('loadingOverlay');
+      overlay.style.display = '';
       overlay.classList.remove('opacity-0', 'pointer-events-none');
       setProgress(5, "Menyiapkan Data...", "Sedang merangkum kritik & saran kamu.");
 
@@ -666,7 +684,7 @@
 
       if (hasVideo) {
         title.textContent = "Terima Kasih Banyak! 🎉";
-        text.textContent = "Kritik, saran, dan video testimoni kamu sudah kami terima. Admin akan segera mengirim voucher diskon Rp50.000 SIM Card Jepang JP Smart + Internet lewat WhatsApp. Klik "Verifikasi ke Admin Sekarang".;
+        text.textContent = "Kritik, saran, dan video testimoni kamu sudah kami terima. Admin akan segera mengirim voucher diskon Rp50.000 SIM Card Jepang JP Smart + Internet lewat WhatsApp. Klik “Verifikasi ke Admin Sekarang”.";
         document.getElementById('successWa').textContent = whatsapp;
         box.classList.remove('hidden');
 
@@ -685,7 +703,7 @@
       const modal = document.getElementById('successModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
-      lucide.createIcons();
+      safeCreateIcons();
     }
   </script>
 </body>
